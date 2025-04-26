@@ -3,6 +3,7 @@ import { Item } from '../services/items/models/item';
 import {
   createItemToDB,
   deleteItemFromDB,
+  getItemByIdFromDB,
   getItemByNameDescFromDB,
   getItemsFromDB,
   updateItemFromDB,
@@ -25,7 +26,7 @@ export const createItem = async (
       price,
     };
     await createItemToDB(newItem);
-    res.status(201).json(newItem);
+    res.status(201).json({ status: true, message: 'Item has been created' });
   } catch (error) {
     next(error);
   }
@@ -39,26 +40,22 @@ export const getItems = async (
 ) => {
   try {
     const itemsList = await getItemsFromDB();
-    res.json(itemsList);
+    res.json({ status: true, data: itemsList });
   } catch (error) {
     next(error);
   }
 };
 
 // Read single item
-export const getItemById = (
+export const getItemById = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const id = parseInt(req.params.id, 10);
-    // const item = items.find((i) => i.id === id);
-    // if (!item) {
-    //   res.status(404).json({ message: 'Item not found' });
-    //   return;
-    // }
-    // res.json(item);
+    const id = new Types.ObjectId(req.params.id);
+    const fetchedItem = await getItemByIdFromDB(id);
+    res.json({ status: true, data: fetchedItem });
   } catch (error) {
     next(error);
   }
@@ -72,7 +69,7 @@ export const getItemByNameDesc = async (
   try {
     const context = req.params.context;
     const items = await getItemByNameDescFromDB(context);
-    res.json(items);
+    res.json({ status: true, data: items });
   } catch (error) {
     next(error);
   }

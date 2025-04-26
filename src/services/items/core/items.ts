@@ -22,6 +22,16 @@ export const getItemsFromDB = async () => {
     });
 };
 
+export const getItemByIdFromDB = async (id: Types.ObjectId) => {
+  return await ItemDB.findOne({ _id: id })
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
+};
+
 export const getItemByNameDescFromDB = async (context: string) => {
   return await ItemDB.find({
     $or: [{ name: { $regex: context } }, { description: { $regex: context } }],
