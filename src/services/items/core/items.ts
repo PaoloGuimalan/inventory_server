@@ -44,6 +44,16 @@ export const getItemByNameDescFromDB = async (context: string) => {
     });
 };
 
+export const getItemByCategoryFromDB = async (context: string) => {
+  return await ItemDB.find({ category: { $regex: context } })
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
+};
+
 export const deleteItemFromDB = async (id: Types.ObjectId) => {
   return await ItemDB.deleteOne({ _id: id })
     .then(() => {

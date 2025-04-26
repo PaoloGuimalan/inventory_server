@@ -6,6 +6,7 @@ import {
   updateItem,
   deleteItem,
   getItemByNameDesc,
+  getItemByCategory,
 } from '../controllers/itemController';
 
 const router = Router();
@@ -13,6 +14,7 @@ const router = Router();
 router.get('/', getItems);
 // router.get('/:id', getItemById);
 router.get('/:context', getItemByNameDesc);
+router.get('/category/:context', getItemByCategory);
 router.post('/', createItem);
 router.put('/:id', updateItem);
 router.delete('/:id', deleteItem);

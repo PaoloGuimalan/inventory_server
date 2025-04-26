@@ -3,6 +3,7 @@ import { Item } from '../services/items/models/item';
 import {
   createItemToDB,
   deleteItemFromDB,
+  getItemByCategoryFromDB,
   getItemByIdFromDB,
   getItemByNameDescFromDB,
   getItemsFromDB,
@@ -69,6 +70,20 @@ export const getItemByNameDesc = async (
   try {
     const context = req.params.context;
     const items = await getItemByNameDescFromDB(context);
+    res.json({ status: true, data: items });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getItemByCategory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const context = req.params.context;
+    const items = await getItemByCategoryFromDB(context);
     res.json({ status: true, data: items });
   } catch (error) {
     next(error);
