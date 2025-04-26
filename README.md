@@ -157,6 +157,8 @@ npm install
 
 2. Set up environment variables:
 
+Create the .env file within the base level of the folder
+
 ```env
 PORT=3000
 NODE_ENV=development
@@ -165,7 +167,17 @@ MONGODB_URL=your_mongodb_connection_string
 
 3. Start the server:
 
+For Development Environment
+
 ```bash
+npm install
+npm run dev
+```
+
+For Production
+
+```bash
+npm run build
 npm start
 ```
 
