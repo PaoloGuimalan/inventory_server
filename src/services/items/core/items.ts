@@ -35,8 +35,20 @@ export const getItemByNameDescFromDB = async (context: string) => {
 };
 
 export const deleteItemFromDB = async (id: Types.ObjectId) => {
-  console.log(id);
   return await ItemDB.deleteOne({ _id: id })
+    .then(() => {
+      return true;
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
+};
+
+export const updateItemFromDB = async (
+  id: Types.ObjectId,
+  updatedItem: Item,
+) => {
+  return await ItemDB.updateOne({ _id: id }, updatedItem)
     .then(() => {
       return true;
     })

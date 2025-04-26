@@ -5,6 +5,7 @@ import {
   deleteItemFromDB,
   getItemByNameDescFromDB,
   getItemsFromDB,
+  updateItemFromDB,
 } from '../services/items/core/items';
 import { Types } from 'mongoose';
 
@@ -78,17 +79,16 @@ export const getItemByNameDesc = async (
 };
 
 // Update an item
-export const updateItem = (req: Request, res: Response, next: NextFunction) => {
+export const updateItem = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
-    const id = parseInt(req.params.id, 10);
-    const { name } = req.body;
-    // const itemIndex = items.findIndex((i) => i.id === id);
-    // if (itemIndex === -1) {
-    //   res.status(404).json({ message: 'Item not found' });
-    //   return;
-    // }
-    // items[itemIndex].name = name;
-    // res.json(items[itemIndex]);
+    const id = new Types.ObjectId(req.params.id);
+    const updatedItem = req.body;
+    await updateItemFromDB(id, updatedItem);
+    res.json({ status: true, message: 'Item has been updated' });
   } catch (error) {
     next(error);
   }
@@ -103,7 +103,7 @@ export const deleteItem = async (
   try {
     const id = req.params.id;
     await deleteItemFromDB(new Types.ObjectId(id));
-    res.json({ message: 'Item has been deleted' });
+    res.json({ status: true, message: 'Item has been deleted' });
   } catch (error) {
     next(error);
   }
