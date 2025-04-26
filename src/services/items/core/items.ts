@@ -32,9 +32,7 @@ export const getCategoriesFromDB = async (
 ) => {
   const totalItems = await ItemDB.countDocuments({});
   const skip = (page - 1) * limit;
-  return await ItemDB.find()
-    .skip(skip)
-    .limit(limit)
+  return await ItemDB.distinct('category')
     .then((response) => {
       return { items: response, meta: { total: totalItems, limit, page } };
     })
@@ -58,14 +56,16 @@ export const getItemsByNameDescFromDB = async (
   page: number = 1,
   limit: number = 10,
 ) => {
-  const totalItems = await ItemDB.countDocuments({});
-  const skip = (page - 1) * limit;
-  return await ItemDB.find({
+  const conditions = {
     $or: [
       { name: { $regex: context, $options: 'i' } },
       { description: { $regex: context, $options: 'i' } },
     ],
-  })
+  };
+
+  const totalItems = await ItemDB.countDocuments(conditions);
+  const skip = (page - 1) * limit;
+  return await ItemDB.find(conditions)
     .skip(skip)
     .limit(limit)
     .then((response) => {
@@ -81,9 +81,10 @@ export const getItemsByCategoryFromDB = async (
   page: number = 1,
   limit: number = 10,
 ) => {
-  const totalItems = await ItemDB.countDocuments({});
+  const conditions = { category: { $regex: context, $options: 'i' } };
+  const totalItems = await ItemDB.countDocuments(conditions);
   const skip = (page - 1) * limit;
-  return await ItemDB.find({ category: { $regex: context, $options: 'i' } })
+  return await ItemDB.find(conditions)
     .skip(skip)
     .limit(limit)
     .then((response) => {

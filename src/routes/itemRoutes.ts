@@ -14,7 +14,7 @@ const router = Router();
 
 router.get('/', getItems);
 // router.get('/:id', getItemById);
-router.get('/:context', getItemsByNameDesc);
+router.get('/search/:context', getItemsByNameDesc);
 router.get('/category/:context', getItemsByCategory);
 router.get('/categories', getCategories);
 router.post('/', createItem);
