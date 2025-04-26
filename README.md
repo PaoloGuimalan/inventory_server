@@ -181,6 +181,26 @@ npm run build
 npm start
 ```
 
+## Docker Deployment
+
+1. Build the Docker image:
+
+```bash
+docker build -t items-management-server .
+```
+
+2. Run the container:
+
+```bash
+docker run -p 3000:3000 --env-file .env items-management-server
+```
+
+The container will:
+
+- Expose port 3000
+- Use environment variables from your .env file
+- Run the production build of the application
+
 ## Development
 
 - TypeScript for type safety
