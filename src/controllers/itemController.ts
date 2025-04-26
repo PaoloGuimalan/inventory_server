@@ -3,11 +3,12 @@ import { Item } from '../services/items/models/item';
 import {
   createItemToDB,
   deleteItemFromDB,
-  getItemByCategoryFromDB,
+  getItemsByCategoryFromDB,
   getItemByIdFromDB,
-  getItemByNameDescFromDB,
+  getItemsByNameDescFromDB,
   getItemsFromDB,
   updateItemFromDB,
+  getCategoriesFromDB,
 } from '../services/items/core/items';
 import { Types } from 'mongoose';
 
@@ -40,8 +41,36 @@ export const getItems = async (
   next: NextFunction,
 ) => {
   try {
-    const itemsList = await getItemsFromDB();
+    const page = Array.isArray(req.headers['page'])
+      ? req.headers['page'][0]
+      : String(req.headers['page'] ?? 1);
+    const limit = Array.isArray(req.headers['limit'])
+      ? req.headers['limit'][0]
+      : String(req.headers['limit'] ?? 10);
+    const itemsList = await getItemsFromDB(parseInt(page), parseInt(limit));
     res.json({ status: true, data: itemsList });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getCategories = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const page = Array.isArray(req.headers['page'])
+      ? req.headers['page'][0]
+      : String(req.headers['page'] ?? 1);
+    const limit = Array.isArray(req.headers['limit'])
+      ? req.headers['limit'][0]
+      : String(req.headers['limit'] ?? 10);
+    const categoryList = await getCategoriesFromDB(
+      parseInt(page),
+      parseInt(limit),
+    );
+    res.json({ status: true, data: categoryList });
   } catch (error) {
     next(error);
   }
@@ -62,28 +91,48 @@ export const getItemById = async (
   }
 };
 
-export const getItemByNameDesc = async (
+export const getItemsByNameDesc = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
+    const page = Array.isArray(req.headers['page'])
+      ? req.headers['page'][0]
+      : String(req.headers['page'] ?? 1);
+    const limit = Array.isArray(req.headers['limit'])
+      ? req.headers['limit'][0]
+      : String(req.headers['limit'] ?? 10);
     const context = req.params.context;
-    const items = await getItemByNameDescFromDB(context);
+    const items = await getItemsByNameDescFromDB(
+      context,
+      parseInt(page),
+      parseInt(limit),
+    );
     res.json({ status: true, data: items });
   } catch (error) {
     next(error);
   }
 };
 
-export const getItemByCategory = async (
+export const getItemsByCategory = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
+    const page = Array.isArray(req.headers['page'])
+      ? req.headers['page'][0]
+      : String(req.headers['page'] ?? 1);
+    const limit = Array.isArray(req.headers['limit'])
+      ? req.headers['limit'][0]
+      : String(req.headers['limit'] ?? 10);
     const context = req.params.context;
-    const items = await getItemByCategoryFromDB(context);
+    const items = await getItemsByCategoryFromDB(
+      context,
+      parseInt(page),
+      parseInt(limit),
+    );
     res.json({ status: true, data: items });
   } catch (error) {
     next(error);

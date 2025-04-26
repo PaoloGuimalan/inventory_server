@@ -12,10 +12,31 @@ export const createItemToDB = async (newItem: Item) => {
     });
 };
 
-export const getItemsFromDB = async () => {
+export const getItemsFromDB = async (page: number = 1, limit: number = 10) => {
+  const totalItems = await ItemDB.countDocuments({});
+  const skip = (page - 1) * limit;
   return await ItemDB.find()
+    .skip(skip)
+    .limit(limit)
     .then((response) => {
-      return response;
+      return { items: response, meta: { total: totalItems, limit, page } };
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
+};
+
+export const getCategoriesFromDB = async (
+  page: number = 1,
+  limit: number = 10,
+) => {
+  const totalItems = await ItemDB.countDocuments({});
+  const skip = (page - 1) * limit;
+  return await ItemDB.find()
+    .skip(skip)
+    .limit(limit)
+    .then((response) => {
+      return { items: response, meta: { total: totalItems, limit, page } };
     })
     .catch((err) => {
       throw new Error(err);
@@ -32,22 +53,41 @@ export const getItemByIdFromDB = async (id: Types.ObjectId) => {
     });
 };
 
-export const getItemByNameDescFromDB = async (context: string) => {
+export const getItemsByNameDescFromDB = async (
+  context: string,
+  page: number = 1,
+  limit: number = 10,
+) => {
+  const totalItems = await ItemDB.countDocuments({});
+  const skip = (page - 1) * limit;
   return await ItemDB.find({
-    $or: [{ name: { $regex: context } }, { description: { $regex: context } }],
+    $or: [
+      { name: { $regex: context, $options: 'i' } },
+      { description: { $regex: context, $options: 'i' } },
+    ],
   })
+    .skip(skip)
+    .limit(limit)
     .then((response) => {
-      return response;
+      return { items: response, meta: { total: totalItems, limit, page } };
     })
     .catch((err) => {
       throw new Error(err);
     });
 };
 
-export const getItemByCategoryFromDB = async (context: string) => {
-  return await ItemDB.find({ category: { $regex: context } })
+export const getItemsByCategoryFromDB = async (
+  context: string,
+  page: number = 1,
+  limit: number = 10,
+) => {
+  const totalItems = await ItemDB.countDocuments({});
+  const skip = (page - 1) * limit;
+  return await ItemDB.find({ category: { $regex: context, $options: 'i' } })
+    .skip(skip)
+    .limit(limit)
     .then((response) => {
-      return response;
+      return { items: response, meta: { total: totalItems, limit, page } };
     })
     .catch((err) => {
       throw new Error(err);
