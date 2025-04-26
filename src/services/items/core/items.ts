@@ -1,4 +1,4 @@
-import { ObjectId, Types } from 'mongoose';
+import { Types } from 'mongoose';
 import { Item } from '../models/item';
 import ItemDB from '../schema/itemSchema';
 
