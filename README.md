@@ -49,7 +49,7 @@ limit: 10
     - `page`: Page number (default: 1)
     - `limit`: Items per page (default: 10)
 
-- `GET /api/items/:context` - Search items by name or description
+- `GET /api/items/search/:context` - Search items by name or description
 
   - Headers:
     - `permission`: Permission level (`User`, `Admin`, `Auditor`)
