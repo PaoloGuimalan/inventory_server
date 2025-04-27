@@ -9,16 +9,17 @@ import {
   getItemsByCategory,
   getCategories,
 } from '../controllers/itemController';
+import { permissionChecker } from '../middlewares/permissionChecker';
 
 const router = Router();
 
 router.get('/', getItems);
 // router.get('/:id', getItemById);
-router.get('/search/:context', getItemsByNameDesc);
-router.get('/category/:context', getItemsByCategory);
-router.get('/categories', getCategories);
-router.post('/', createItem);
-router.put('/:id', updateItem);
-router.delete('/:id', deleteItem);
+router.get('/search/:context', permissionChecker, getItemsByNameDesc);
+router.get('/category/:context', permissionChecker, getItemsByCategory);
+router.get('/categories', permissionChecker, getCategories);
+router.post('/', permissionChecker, createItem);
+router.put('/:id', permissionChecker, updateItem);
+router.delete('/:id', permissionChecker, deleteItem);
 
 export default router;
