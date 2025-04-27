@@ -22,34 +22,58 @@ server/
 
 ## API Endpoints
 
+### Headers
+
+All endpoints accept an additional header:
+
+- `permission`: Specifies the permission level for the request.
+  - **Accepted values:** `User`, `Admin`, `Auditor`
+
+**Example:**
+
+```http
+GET /api/items
+permission: Admin
+page: 1
+limit: 10
+```
+
+> The `permission` header must be set to one of: `User`, `Admin`, or `Auditor`. Endpoints may enforce different behaviors or access controls based on this value.
+
 ### Items
 
 - `GET /api/items` - Get all items (paginated)
 
   - Headers:
+    - `permission`: Permission level (`User`, `Admin`, `Auditor`)
     - `page`: Page number (default: 1)
     - `limit`: Items per page (default: 10)
 
 - `GET /api/items/:context` - Search items by name or description
 
   - Headers:
+    - `permission`: Permission level (`User`, `Admin`, `Auditor`)
     - `page`: Page number (default: 1)
     - `limit`: Items per page (default: 10)
 
 - `GET /api/items/category/:context` - Search items by category
 
   - Headers:
+    - `permission`: Permission level (`User`, `Admin`, `Auditor`)
     - `page`: Page number (default: 1)
     - `limit`: Items per page (default: 10)
 
 - `GET /api/items/categories` - Get all unique categories
 
   - Headers:
+    - `permission`: Permission level (`User`, `Admin`, `Auditor`)
     - `page`: Page number (default: 1)
     - `limit`: Categories per page (default: 10)
 
 - `POST /api/items` - Create a new item
 
+  - Headers:
+    - `permission`: Permission level (`User`, `Admin`, `Auditor`)
   - Body:
     ```json
     {
@@ -62,9 +86,14 @@ server/
 
 - `PUT /api/items/:id` - Update an item
 
+  - Headers:
+    - `permission`: Permission level (`User`, `Admin`, `Auditor`)
   - Body: Same as POST
 
 - `DELETE /api/items/:id` - Delete an item
+
+  - Headers:
+    - `permission`: Permission level (`User`, `Admin`, `Auditor`)
 
 ## Data Models
 
@@ -158,6 +187,8 @@ npm install
 2. Set up environment variables:
 
 Create the .env file within the base level of the folder
+
+You may request for my MONGODB_URL
 
 ```env
 PORT=3000
